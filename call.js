@@ -1,4 +1,4 @@
-const options = { method: 'GET', headers: { 'x-cg-demo-api-key': 'CG-BycXtXB8pGv8wRCAgNn6vWrA' } };
+const options = { method: 'GET', headers: { 'x-cg-demo-api-key': 'CG-pwZfjpJz94B3BDXSbPfWauGm' } };
 
 fetch('https://api.coingecko.com/api/v3/coins/markets?&ids=asd&vs_currency=usd&price_change_percentage=24h', options)
     .then(res => res.json())

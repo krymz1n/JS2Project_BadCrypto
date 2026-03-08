@@ -1,15 +1,20 @@
 'use strict'
 
-const path = require('path')
-const autoprefixer = require('autoprefixer')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path');
+const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   mode: 'development',
-  entry: './src/js/main.js',
+  entry: {
+    main: './src/js/main.js',
+    app: './src/js/app.js'
+  },
   output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, 'dist')
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
   devServer: {
     static: path.resolve(__dirname, 'dist'),
@@ -17,7 +22,12 @@ module.exports = {
     hot: true
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: './src/index.html' })
+    new HtmlWebpackPlugin({ 
+        template: './src/index.html',
+        inject: 'body',
+        chunks: ['main']
+    }),
+    new Dotenv(),
   ],
   module: {
     rules: [

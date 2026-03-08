@@ -18,6 +18,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.27",
     "css-loader": "^7.1.4",
+    "dotenv-webpack": "^9.0.0",
     "html-webpack-plugin": "^5.6.6",
     "postcss-loader": "^8.2.1",
     "sass": "^1.97.3",
