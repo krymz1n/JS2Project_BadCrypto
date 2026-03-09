@@ -1,93 +1,130 @@
 
+/**
+ * formats large numbers for readability
+ * @example 1201231.12345 => '1,201,231.12'
+ * @param {Number} num 
+ * @returns {String}
+ */
+export function formatCurrency(num) {
+    // take absolute value
+    // truncate to 2 decimal places
+    // typecast to String
+    const string = String(Math.abs(num.toFixed(2)));
+    // get whole numbers
+    let wholeNums = string.slice(0, -3)
+    // get decimals
+    const decimalNums = string.slice(-2)
+
+    // initialize output string
+    let outputString = ''
+    // while remaining wholeNums more than 3 digits
+    while (wholeNums.length > 3) {
+        // take last three digits as slice
+        const slice = wholeNums.slice(-3)
+        // delete them from wholeNums
+        wholeNums = wholeNums.slice(0, -3)
+        // if outputstring is empty
+        if (outputString.length == 0) {
+            // add slice
+            outputString = slice
+        }
+        else {
+            // add slice in front of outputString
+            outputString = `${slice},${outputString}`
+        }
+    }
+    // add remaining wholeNums in front of output
+    outputString = `${wholeNums},${outputString}`
+    // add a decimal
+    outputString += '.'
+    // add decimal nums
+    outputString += decimalNums
+
+    return outputString
+}
+
+
+formatCurrency(1234567890.123185817)
 
 /**
- * Generates html string for one display card with a given json node
- * @param {coinNode24hr} node 
- * @returns {String} html
+ * Renders a historical price chart with a given array of coin nodes
+ * @param {Array<import("./app").coinNode24hr>} nodeArray 
+ * @param {String} targetDiv 
+ * @returns {Plotly}
  */
-export function createCard(node) {
-    let html = `
-        <div class="col-lg-4 col-md-6">
-            <div class="card my-2 ">
-            <div class="card-header d-flex justify-content-between text-bg-warning">
-                <span class="fw-bold h4">${node.name}</span>
-                <span class="h5">${node.symbol}</span>
-            </div>
-            <div class="card-body">
-                <p>24 Hour change: ${node.price_change_percentage_24h.toFixed(2)}%</p>
-                <p>Total loss: $${node.market_cap_change_24h.toFixed(2)}</p>
-            </div>
-            </div>
-        </div>
-    `
+export async function renderChart(nodeArray, targetDiv) {
 
-    return html
+    // initialize data array
+    let data = []
+    // for each coin node in given array
+    for (const node of nodeArray) {
+        // wait for api call
+        const result = await getChartData(node)
+        // add historical price data to array
+        data.push(result)
+    }
+
+    // plotly layout 
+    const layout = {
+        paper_bgcolor: 'rgba(0,0,0,0)',   // fully transparent outer background
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        autosize: true,
+        legend: {
+            x: 1,
+            y: 1,
+            xanchor: 'right',
+            yanchor: 'top',
+            bgcolor: 'rgba(255,255,255,.5)',
+            bordercolor: 'black',
+            borderwidth: 1,
+        }
+    };
+
+    // plotly config
+    const config = {
+        responsive: true
+    }
+
+    return Plotly.newPlot(targetDiv, data, layout, config);
 }
 
-function currencyString(rawNum) {
-    let priceString;
-}
-
-function calcMoneyLost(node) {
-
-}
 
 /**
- * gets list of coins with marketdata
- * @returns {marketData}
+ * fetches historical data for coin, returns as plotly chart data
+ * @param {Object} node 
+ * @returns {Object} plotly graph data
  */
-export function getMarketData() {
+async function getChartData(node) {
+    // make api call
     const options = { method: 'GET', headers: { 'x-cg-demo-api-key': 'CG-pwZfjpJz94B3BDXSbPfWauGm' } };
+    const res = await fetch(`https://api.coingecko.com/api/v3/coins/${node.id}/market_chart?vs_currency=usd&days=365&precision=2`, options)
+    const data = await res.json();
 
-    fetch('https://api.coingecko.com/api/v3/coins/markets?&ids=asd&vs_currency=usd&price_change_percentage=24h', options)
-        .then(res => res.json())
-        .then(res => {
-            for (const value of Object.values(res)) {
-            }
-            const btc = res[0];
-            let output = ''
-            for (const [key, value] of Object.entries(btc)) {
-                output += `${key}: ${value}
-        `
-            }
-            console.log('output' + output)
-            console.table(btc)
-        })
-        .catch(err => console.error(err));
+    // initialize date and price arrays
+    let datesArray = new Array()
+    let pricesArray = new Array()
 
-    return output
+    // parse data into arrays
+    data.prices.forEach(element => {
+        datesArray.push(element[0]);
+        pricesArray.push(element[1])
+    });
+
+    // return as object formatted for plotly
+    return {
+        x: datesArray,
+        y: pricesArray,
+        type: 'scatter',
+        name: node.name
+        
+    }
 }
 
 /**
- * @typedef {Object.<string, coinNode24hr} marketData
+ * removes a chart in a div with given id
+ * @param {String} targetDiv 
+ * @returns {Void}
  */
-
-/**
- * @typedef {Object} coinNode24hr
- * @property {String} symbol
- * @property {String} name
- * @property {String} image
- * @property {Number} current_price
- * @property {Number} market_cap
- * @property {Number} market_cap_rank
- * @property {Number} fully_diluted_valuation
- * @property {Number} total_volume
- * @property {Number} high_24h
- * @property {Number} low_24h
- * @property {Number} price_change_24h
- * @property {Number} price_change_percentage_24h
- * @property {Number} market_cap_change_24h
- * @property {Number} market_cap_change_percentage_24h
- * @property {Number} circulating_supply
- * @property {Number} total_supply
- * @property {Number} max_supply
- * @property {Number} ath
- * @property {Number} ath_change_percentage
- * @property {String} ath_date
- * @property {Number} atl
- * @property {Number} atl_change_percentage
- * @property {String} atl_date
- * @property {{times: Number, currency: String, percentage: Number}} roi
- * @property {String} last_updated
- * @property {Number} price_change_percentage_24h_in_currency
- */
+export function cleanUpChart(targetDiv) {
+    Plotly.purge(targetDiv);
+}

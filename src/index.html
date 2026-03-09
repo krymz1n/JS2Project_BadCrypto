@@ -17,6 +17,31 @@
           </p>
         </div>
 
+        <div class="modal" tabindex="-1" id="detail-modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <p class="modal-title" id="detail-title">
+                  Detail Modal Title
+                </p>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+              </div>
+              <div class="modal-body" >
+                <div class="" id="detail-body">
+
+                </div>
+
+              </div>
+              <div class="modal-footer" id="detail-footer">
+<p>text</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
         <div class="card-body">
 
 
@@ -28,8 +53,19 @@
                     Overview Window
                   </p>
                 </div>
-                <div class="card-body" id=""
-                style="">
+                <div class="card-body">
+                <div class="d-flex justify-content-around">
+                  <div class="btn-group" role="group">
+                    <input type="radio" id="worst-today" class="btn-check" name="btnradio"  autocomplete="off" checked>
+                    <label for="worst-today" class="btn btn-outline-primary">Worst today</label>
+                    <input type="radio" id="big-drop" class="btn-check" name="btnradio"  autocomplete="off" >
+                    <label for="big-drop" class="btn btn-outline-primary">Biggest drop</label>
+                  </div>
+                  <div>
+                    <p id="accolade" class="text-bg-danger badge rounded-pill">
+                    </p>
+                  </div>
+                </div>
                 <div id="chart-div">
 
                 </div>
@@ -86,7 +122,6 @@
         </div>
       </div>
     </div>
-  </div>
   </div>
 </body>
 
