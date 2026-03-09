@@ -7,14 +7,12 @@ import * as Plotly from 'plotly.js-dist'
 
 // import app.js
 import { App } from './app.js'
-import { render } from 'sass'
 
 window.onload = () => {
-    const app = new App();
+    new App();
 
 }
 
-
-const chartDiv = document.querySelector('#chart-div');
+console.log(process.env.GK_API)
 
 

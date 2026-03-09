@@ -96,7 +96,7 @@ export async function renderChart(nodeArray, targetDiv) {
  */
 async function getChartData(node) {
     // make api call
-    const options = { method: 'GET', headers: { 'x-cg-demo-api-key': 'CG-pwZfjpJz94B3BDXSbPfWauGm' } };
+    const options = { method: 'GET', headers: { 'x-cg-demo-api-key': process.env.GK_API } };
     const res = await fetch(`https://api.coingecko.com/api/v3/coins/${node.id}/market_chart?vs_currency=usd&days=365&precision=2`, options)
     const data = await res.json();
 

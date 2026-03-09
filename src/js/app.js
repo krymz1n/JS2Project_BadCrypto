@@ -74,7 +74,7 @@ export class App {
      */
     #getMarketData() {
         let output;
-        const options = { method: 'GET', headers: { 'x-cg-demo-api-key': 'CG-pwZfjpJz94B3BDXSbPfWauGm' } };
+        const options = { method: 'GET', headers: { 'x-cg-demo-api-key': process.env.GK_API } };
 
         fetch('https://api.coingecko.com/api/v3/coins/markets?&ids=&vs_currency=usd&price_change_percentage=24h', options)
             .then(res => res.json())
