@@ -1,5 +1,5 @@
 'use strict'
-
+const webpack = require('webpack')
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -14,7 +14,7 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+    publicPath: './'
   },
   devServer: {
     static: path.resolve(__dirname, 'dist'),
@@ -25,9 +25,15 @@ module.exports = {
     new HtmlWebpackPlugin({ 
         template: './src/index.html',
         inject: 'body',
-        chunks: ['main']
+        chunks: ['main', 'app']
     }),
     new Dotenv(),
+    // new webpack.DefinePlugin({
+    //     'process.env.GK_API': JSON.stringify(process.env.GK_API),
+    //     'process.env.GK_LIST': JSON.stringify(process.env.GK_LIST),
+    //     'process.env.GK_DETAIL_URL': JSON.stringify(process.env.GK_DETAIL_URL),
+    //     'process.env.GK_DETAIL_APPEND': JSON.stringify(process.env.GK_DETAIL_APPEND),
+    // })   
   ],
   module: {
     rules: [
