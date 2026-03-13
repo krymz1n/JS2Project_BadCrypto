@@ -1,3 +1,6 @@
+/**
+ * @author {String} BoRyan Crum
+ */
 
 /**
  * formats large numbers for readability
@@ -97,7 +100,7 @@ export async function renderChart(nodeArray, targetDiv) {
 async function getChartData(node) {
     // make api call
     const options = { method: 'GET', headers: { 'x-cg-demo-api-key': process.env.GK_API } };
-    const res = await fetch(`https://api.coingecko.com/api/v3/coins/${node.id}/market_chart?vs_currency=usd&days=365&precision=2`, options)
+    const res = await fetch(`${process.env.GK_DETAIL_URL}${node.id}${process.env.GK_DETAIL_APPEND}`, options)
     const data = await res.json();
 
     // initialize date and price arrays

@@ -1,4 +1,7 @@
-import { render } from 'sass';
+/**
+ * @author {String} BoRyan Crum
+ */
+
 import * as Utils from './utilities'
 import * as bootstrap from 'bootstrap'
 
@@ -76,7 +79,7 @@ export class App {
         let output;
         const options = { method: 'GET', headers: { 'x-cg-demo-api-key': process.env.GK_API } };
 
-        fetch('https://api.coingecko.com/api/v3/coins/markets?&ids=&vs_currency=usd&price_change_percentage=24h', options)
+        fetch(process.env.GK_LIST, options)
             .then(res => res.json())
             .then(res => {
                 /** @type {coinNode24hr} */
